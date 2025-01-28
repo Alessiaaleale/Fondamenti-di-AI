@@ -90,22 +90,25 @@ class JSONFileOpener(FileOpenerStrategy):
             return None
 
 
-def open_file(file_path: str) -> pd.DataFrame:
+class FileOpener:
     '''
-    La funzione seleziona la strategia appropriata in base all'estensione del file
+    Restituisce la strategia di apertura file appropriata in base all'estensione del file
     '''
-    file_path_to_strategy = {
-        '.csv': CSVFileOpener(),
-        '.xlsx': ExcelFileOpener(),
-        '.xls': ExcelFileOpener(),
-        '.txt': TextFileOpener(),
-        '.tsv': TSVFileOpener(),
-        '.json': JSONFileOpener(),  
-    }
-    ext = file_path[file_path.rfind('.'):] #Estrae l'estensione del file 
-    strategy = file_path_to_strategy.get(ext, None)
-    if strategy: #Se viene trovata una strategia, chiama il metodo open_file della strategia selezionata.
-        return strategy.open_file(file_path)
-    else:
-        raise ValueError(f"No strategy found for file : {file_path}")
-        
+    def get_file_opener(self, file_path: str):
+        ext = file_path[file_path.rfind('.'):]
+        if ext == '.csv':
+            return CSVFileOpener()
+        elif ext in ['.xlsx', '.xls']:
+            return ExcelFileOpener()
+        elif ext == '.txt':
+            return TextFileOpener()
+        elif ext == '.tsv':
+            return TSVFileOpener()
+        elif ext == '.json':
+            return JSONFileOpener()
+        else:
+            raise ValueError(f"No strategy found for file: {file_path}")
+
+    def open(self, file_path: str) -> pd.DataFrame:
+        file_opener = self.get_file_opener(file_path)
+        return file_opener.open_file(file_path)
