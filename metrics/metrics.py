@@ -109,6 +109,7 @@ class MetricsCalculator:
             print("6. Miss Rate")
             print("7. Geometric Mean")
             print("8. Area Under the Curve")
+
             metric_choices = input("Inserisci i numeri corrispondenti alle metriche desiderate, separate da virgole: ")
 
             metrics_dict = {
