@@ -68,11 +68,11 @@ class Split:
         :param Y:  Etichette.
         :return: Lista di tuple (x_train, y_train, x_test, y_test) per ogni iterazione.
         """
-        n_train = int(len(X) * self.percentuale)
+        n_train = int(len(X) * self.percentage)
         campioni = len(X)
         splits = []
 
-        for i in range(self.iterazioni):
+        for i in range(self.iterations):
             # Campionamento con ripetizione per ottenere il training set
             indici_train = np.random.choice(campioni, size=n_train, replace=True)
             indici_test = np.setdiff1d(np.arange(campioni), indici_train)  # Elementi non selezionati per il test set
