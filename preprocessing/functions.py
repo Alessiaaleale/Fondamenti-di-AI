@@ -6,6 +6,14 @@ class DataPreprocessing:
     """
     def __init__(self, df) :
         self.df = df
+    def set_column_as_index(self, index_col) -> pd.DataFrame:
+        """
+        Imposta la colonna specificata come indice del Dataframe
+        """
+        if index_col in self.df.columns:
+            self.df = self.df.set_index(index_col)
+        else:
+            print(f"La colonna '{index_col}' non è stata trovata. L'indice verrà impostato in automatico.")
     def drop_nan_target(self, col_name) -> pd.DataFrame:
         """
         Rimuove le righe con valori NaN nella colonna target.
@@ -63,10 +71,11 @@ class DataPreprocessing:
             max_val = self.df[column].max()
             self.df[column] = (self.df[column] - min_val) / (max_val- min_val)
 
-    def preprocessing(self, col_name, method_fill_nan)-> pd.DataFrame:
+    def preprocessing(self, index_col, col_name, method_fill_nan)-> pd.DataFrame:
         """
         Esegue il preprocessing dei dati.
         """
+        df = self.set_column_as_index(index_col)
         df = self.drop_nan_target(col_name)
         df = self.factorize_target_column(col_name)
         df = self.delete_columns_with_80_percent_non_numeric()
