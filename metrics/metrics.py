@@ -4,10 +4,14 @@ class MetricsCalculator:
     """
     Classe per calcolare le metriche di classificazione.
     """
-
     def __init__(self, confusion_matrix):
         self.confusion_matrix = confusion_matrix
         self.tp, self.tn, self.fp, self.fn = confusion_matrix
+        for i in [self.tp, self.tn, self.fp, self.fn]:
+            if i < 0:
+                raise ValueError("I valori della matrice di confusione non possono essere negativi.")
+        if self.tp and self.tn and self.fp and self.fn == 0:
+            raise ValueError("La matrice di confusione non può contenere solo zeri.")
 
     def accuracy_rate(self) -> float:
         """
@@ -25,25 +29,37 @@ class MetricsCalculator:
         """
         Calcola la sensitivity.
         """
-        return self.tp / (self.tp + self.fn) if (self.tp + self.fn) > 0 else 0
+        if (self.tp + self.fn) > 0:
+            return self.tp / (self.tp + self.fn)
+        else:
+            raise ValueError("Divisione per zero")
 
     def specificity(self) -> float:
         """
         Calcola la specificity.
         """
-        return self.tn / (self.tn + self.fp) if (self.tn + self.fp) > 0 else 0
+        if (self.tn + self.fp) > 0:
+            return self.tn / (self.tn + self.fp)
+        else:
+            raise ValueError("Divisione per zero")
 
     def false_alarm_rate(self) -> float:
         """
         Calcola la false alarm rate.
         """
-        return self.fp / (self.fp + self.tn) if (self.fp + self.tn) > 0 else 0
+        if (self.fp + self.tn) > 0:
+            return self.fp / (self.fp + self.tn)
+        else:
+            raise ValueError("Divisione per zero")
 
     def miss_rate(self) -> float:
         """
         Calcola la miss rate.
         """
-        return self.fn / (self.fn + self.tp) if (self.fn + self.tp) > 0 else 0
+        if (self.fn + self.tp) > 0:
+            return self.fn / (self.fn + self.tp)
+        else:
+            raise ValueError("Divisione per zero")
 
     def geometric_mean(self) -> float:
         """
@@ -67,9 +83,6 @@ class MetricsCalculator:
         """
         if len(self.confusion_matrix) != 4:
             raise ValueError("La matrice di confusione deve contenere esattamente 4 valori: [TP, TN, FP, FN]")
-
-        if any(x < 0 for x in [self.tp, self.tn, self.fp, self.fn]):
-            raise ValueError("I valori della matrice di confusione non possono essere negativi.")
 
         all_metrics = {
             'Accuracy Rate': self.accuracy_rate(),
