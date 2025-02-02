@@ -6,6 +6,7 @@ class DataPreprocessing:
     """
     def __init__(self, df) :
         self.df = df
+
     def set_column_as_index(self, index_col) -> pd.DataFrame:
         """
         Imposta la colonna specificata come indice del Dataframe
@@ -14,54 +15,71 @@ class DataPreprocessing:
             self.df = self.df.set_index(index_col)
         else:
             print(f"La colonna '{index_col}' non è stata trovata. L'indice verrà impostato in automatico.")
-    def drop_nan_target(self, col_name) -> pd.DataFrame:
+        return self.df
+    
+    def drop_nan_target(self, target_column) -> pd.DataFrame:
         """
         Rimuove le righe con valori NaN nella colonna target.
         """
-        self.df = self.df.dropna(subset=[col_name])
-    def factorize_target_column(self, col_name) -> pd.DataFrame:
+        self.df = self.df.dropna(subset=[target_column])
+        return self.df
+    
+    def factorize_target_column(self, target_column) -> pd.DataFrame:
         """
         Sostituisce i valori della colonna target con valori numerici.
         """
-        self.df[col_name] = pd.factorize(self.df[col_name])[0]
+        self.df[target_column] = pd.factorize(self.df[target_column])[0]
+        return self.df
+    
     def remove_commas_to_float(self) -> pd.DataFrame:
         """
         Sostituisce le virgole con i punti e converte le colonne in float.
         """
-        self.df = self.df.replace(',', '.', regex=True).astype(float)
-    def delete_columns_with_80_percent_non_numeric(self) -> pd.DataFrame:
+        try:
+            self.df = self.df.replace(',', '.', regex=True).astype(float)
+        except ValueError:
+            pass
+        return self.df
+    
+    def filter_columns_by_numeric_percentage(self, threshold: float = 0.8) -> pd.DataFrame:
         """
-        Rimuove le colonne con più dell'80% di valori non numerici.
+        Mantiene solo le colonne con una percentuale di valori numerici maggiore di 'threshold'.
         """
-        threshold = 0.8
-        for column in self.df.columns:
-            num_non_numeric = self.df[column].apply(lambda x: not pd.api.types.is_numeric_dtype(type(x))).sum()
-            if num_non_numeric / len(self.df) > threshold:
-                self.df.drop(column, axis=1, inplace=True)
+        # Calcolare la percentuale di valori numerici per ogni colonna
+        numeric_counts = self.df.map(lambda x: isinstance(x, (int, float))).sum()
+        total_counts = len(self.df)
+        numeric_percentage = numeric_counts / total_counts
+        # Filtrare le colonne in base alla percentuale di valori numerici
+        self.df = self.df.loc[:, numeric_percentage >= threshold]
+        return self.df
+    
     def replace_string_with_nan(self) -> pd.DataFrame:
         """
         Sostituisce le stringhe con valori NaN.
         """
         self.df = self.df.apply(pd.to_numeric, errors='coerce')
-
-    def replace_nan(self, method_fill_nan, col_name) -> pd.DataFrame:
+        return self.df
+    
+    def replace_nan(self, method_fill_nan, target_column) -> pd.DataFrame:
         """
         Sostituisce i valori NaN con la media o la mediana.
         """
         if method_fill_nan == 'mean':
-            for column in self.df.loc[:, self.df.columns != col_name]:
-                # Raggruppa il DataFrame in base ai valori della colonna col_name
+            for column in self.df.loc[:, self.df.columns != target_column]:
+                # Raggruppa il DataFrame in base ai valori della colonna target_column
                 # Per ogni gruppo, seleziona la colonna specificata
                 # e riempe i valori mancanti con la media dei valori presenti in quel gruppo
-                self.df[column] = self.df.groupby(col_name)[column].transform(lambda x: x.fillna(x.mean()))
+                self.df[column] = self.df.groupby(target_column)[column].transform(lambda x: x.fillna(x.mean()))
         elif method_fill_nan == 'median':
-            for column in self.df.loc[:, self.df.columns != col_name]:
-                # Raggruppa il DataFrame in base ai valori della colonna col_name
+            for column in self.df.loc[:, self.df.columns != target_column]:
+                # Raggruppa il DataFrame in base ai valori della colonna target_column
                 # Per ogni gruppo, seleziona la colonna specificata
                 # e riempe i valori mancanti con la mediana dei valori presenti in quel gruppo
-                self.df[column] = self.df.groupby(col_name)[column].transform(lambda x: x.fillna(x.median()))
+                self.df[column] = self.df.groupby(target_column)[column].transform(lambda x: x.fillna(x.median()))
         else:
             raise ValueError("Method must be 'mean' or 'median'")
+        return self.df
+    
     def scale_columns(self)-> pd.DataFrame:
         """"
         Normalizza le colonne.
@@ -70,18 +88,27 @@ class DataPreprocessing:
             min_val = self.df[column].min()
             max_val = self.df[column].max()
             self.df[column] = (self.df[column] - min_val) / (max_val- min_val)
+        return self.df
 
-    def preprocessing(self, index_col, col_name, method_fill_nan)-> pd.DataFrame:
+    def features_and_target(self, target_column) -> tuple:
+        """
+        Separa le features e il target in un DataFrame.
+        """
+        features = self.df.iloc[:,self.df.columns != target_column]
+        target = self.df.iloc[:,self.df.columns == target_column]
+        return features, target
+    
+    def preprocessing(self, index_col, target_column, method_fill_nan)-> pd.DataFrame:
         """
         Esegue il preprocessing dei dati.
         """
         df = self.set_column_as_index(index_col)
-        df = self.drop_nan_target(col_name)
-        df = self.factorize_target_column(col_name)
-        df = self.delete_columns_with_80_percent_non_numeric()
+        df = self.drop_nan_target(target_column)
+        df = self.factorize_target_column(target_column)
         df = self.remove_commas_to_float()
+        df = self.filter_columns_by_numeric_percentage()
         df = self.replace_string_with_nan()
-        df = self.replace_nan(method_fill_nan, col_name)
+        df = self.replace_nan(method_fill_nan, target_column)
         df = self.scale_columns()
         df = self.df
         return df
