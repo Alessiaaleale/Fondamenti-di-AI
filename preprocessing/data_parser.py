@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import pandas as pd
 import json
-import io  
+import io
 
 class FileOpenerStrategy(ABC):
     '''
@@ -26,7 +26,7 @@ class CSVFileOpener(FileOpenerStrategy):
             return None
 
 class ExcelFileOpener(FileOpenerStrategy):
-    '''   
+    '''
     Classe che implementa il parser per i file excel
     '''
     def open_file(self, file_path: str)-> pd.DataFrame:
@@ -45,7 +45,7 @@ class TextFileOpener(FileOpenerStrategy):
     def open_file(self, file_path: str)-> pd.DataFrame:
         try:
             with open(file_path, 'r', encoding='utf-8') as file:
-                content = file.readlines()  
+                content = file.readlines()
             # Controlla se è un file di testo csv (comma o tab-separated)
             first_line = content[0]
             if ',' in first_line:
@@ -84,7 +84,16 @@ class JSONFileOpener(FileOpenerStrategy):
                 data = json.load(file)
             print(f"[JSONFileOpener] Opened JSON file: {file_path}")
             df = pd.json_normalize(data)  # Converte JSON a Dataframe
+            # Tentare di convertire le colonne a int64 ove possibile
+            for column in df.columns:
+                try:
+                    df[column] = pd.to_numeric(df[column], errors='ignore')
+                    if df[column].dtype == 'float64':
+                        df[column] = df[column].astype('int64', errors='ignore')
+                except (ValueError, TypeError):
+                    pass  # Lascia la colonna invariata se non può essere convertita
             return df
+
         except Exception as e:
             print(f"[JSONFileOpener] Failed to open JSON file: {file_path} - {e}")
             return None
