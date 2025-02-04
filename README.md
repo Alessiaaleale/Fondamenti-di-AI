@@ -1,2 +1,24 @@
 # Fondamenti-di-AI
-Esplorazione di un dataset che contiene informazioni su varie caratteristiche delle cellule tumorali e la loro corrispondente classificazione come benigne o maligne. L'obiettivo è sviluppare un modello di apprendimento automatico e verificarne le prestazioni per classificare i tumori in base alle caratteristiche fornite. 
+## Autori
+- [Alessia](https://github.com/Alessiaaleale)
+- [Emanuele](https://github.com/Leleart)
+- [Giorgia](https://github.com/Giorgialopinto)
+
+How run code
+============
+Clona il repository
+```python
+git clone https://github.com/Alessiaaleale/Fondamenti-di-AI
+```
+Crea un ambiente virtuale
+```python
+python -m venv env
+```
+Attiva l'ambiente virtuale
+```python
+.\env\Scripts\activate
+```
+Installa le dipendenze
+```python
+pip install -r requirements.txt
+```
