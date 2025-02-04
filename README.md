@@ -33,9 +33,9 @@ Il modello proposto utilizza il classificatore k-NN (k-Nearest Neighbors) e dive
 
 ## Panoramica Dettagliata del Dataset, version_1.csv:
 
-###### Numero di Campioni: 693 campioni.
+##### Numero di Campioni: 693 campioni.
 
-###### Numero di Caratteristiche: 13 caratteristiche per campione.
+##### Numero di Caratteristiche: 13 caratteristiche per campione.
 
 ## Caratteristiche del Dataset:
 1. **Blood Pressure:** pressione sanguigna registrata (dato aggiuntivo, non direttamente correlato alle cellule).
@@ -54,7 +54,6 @@ Il modello proposto utilizza il classificatore k-NN (k-Nearest Neighbors) e dive
 
 
 ## **Come eseguire il codice**
-============
 Eseguire i seguenti comandi nella directory principale del progetto.
 
 _Clona il repository:_
@@ -118,13 +117,13 @@ Oltre alle colonne precedentemente elencate, può contenere una colonna da utili
 ## **Configurazione Interattiva**
 Il programma permette di configurare diverse fasi del processo attraverso opzioni interattive:
 
-### **1.Gestione dei Valori Mancanti**
+### **1. Gestione dei Valori Mancanti**
 L'utente può scegliere come trattare i valori mancanti nel dataset, selezionando una delle seguenti opzioni:
 - `mean`: sostituisce i valori mancanti con la media delle colonne.
 - `median`: sostituisce i valori mancanti con la mediana delle colonne.
 Se non viene fornita una scelta valida, il programma utilizza automaticamente la strategia `mean`.
 
-### **2.Validazione del Modello**
+### **2. Validazione del Modello**
 L'utente può scegliere una strategia di validazione per dividere i dati in set di training e test.
 L'utente può selezionare una strategia di validazione per suddividere i dati in set di training e test:
 
