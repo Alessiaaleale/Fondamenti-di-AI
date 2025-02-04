@@ -1,6 +1,6 @@
 import numpy as np
 from metrics_results.metrics import MetricsCalculator
-from knn import KNNClassifier
+from model.knn import KNNClassifier
 from metrics_results.results import ResultSaver
 
 class classification_evaluation:
