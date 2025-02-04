@@ -1,6 +1,7 @@
 import numpy as np
-from metrics.metrics import MetricsCalculator
+from metrics_results.metrics import MetricsCalculator
 from knn import KNNClassifier
+from metrics_results.results import ResultSaver
 
 class classification_evaluation:
     def knn_metrics(k, splits,user_choice) -> dict:
@@ -33,4 +34,10 @@ class classification_evaluation:
                 metrics_dict[metric].append(value)
 
         mean_metrics = {key: np.mean(values) for key, values in metrics_dict.items() if values}
+
+        # Salva il grafico dell'andamento delle metriche
+        ResultSaver.save_plot(lista_metriche, user_choice, splits)
+
+        # Salva le metriche in un file Excel
+        ResultSaver.save_metrics_to_excel(lista_metriche, mean_metrics)
         return mean_metrics
