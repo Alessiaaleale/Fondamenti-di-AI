@@ -83,13 +83,13 @@ class JSONFileOpener(FileOpenerStrategy):
             with open(file_path, 'r', encoding='utf-8') as file:
                 data = json.load(file)
             print(f"[JSONFileOpener] Opened JSON file: {file_path}")
-            df = pd.json_normalize(data)  # Converte JSON a Dataframe
+            df = pd.DataFrame(data)
             # Tentare di convertire le colonne a int64 ove possibile
             for column in df.columns:
                 try:
-                    df[column] = pd.to_numeric(df[column], errors='ignore')
+                    df[column] = pd.to_numeric(df[column])
                     if df[column].dtype == 'float64':
-                        df[column] = df[column].astype('int64', errors='ignore')
+                        df[column] = df[column].astype('int64')
                 except (ValueError, TypeError):
                     pass  # Lascia la colonna invariata se non può essere convertita
             return df
