@@ -14,9 +14,9 @@ Il modello proposto utilizza il classificatore k-NN (k-Nearest Neighbors) e dive
 
 ## Panoramica Dettagliata del Dataset, version_1.csv:
 
-##### Numero di Campioni: 693 campioni.
+- Numero di Campioni: 693 campioni.
 
-##### Numero di Caratteristiche: 13 caratteristiche per campione.
+- Numero di Caratteristiche: 13 caratteristiche per campione.
 
 ## Caratteristiche del Dataset:
 1. **Blood Pressure:** pressione sanguigna registrata (dato aggiuntivo, non direttamente correlato alle cellule).
