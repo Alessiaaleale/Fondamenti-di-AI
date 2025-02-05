@@ -4,25 +4,6 @@
 - [Emanuele](https://github.com/Leleart)
 - [Giorgia](https://github.com/Giorgialopinto)
 
-Come eseguire il codice 
-============
-Clona il repository
-```python
-git clone https://github.com/Alessiaaleale/Fondamenti-di-AI
-```
-Crea un ambiente virtuale:
-```python
-python -m venv env
-```
-Attiva l'ambiente virtuale:
-```python
-.\env\Scripts\activate
-```
-Installa le dipendenze:
-```python
-pip install -r requirements.txt
-```
-
 ## Obiettivo
 
 Il progetto ha come obiettivo la creazione di un modello di machine learning per classificare cellule tumorali in benigne o maligne. Le cellule tumorali possono essere benigne, caratterizzate da crescita limitata e localizzata, oppure maligne, con capacità aggressiva di proliferazione e metastasi. L'identificazione accurata di queste cellule è cruciale per diagnosi e trattamenti efficaci.
