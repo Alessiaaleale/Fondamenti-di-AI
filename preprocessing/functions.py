@@ -77,7 +77,8 @@ class DataPreprocessing:
                 # e riempe i valori mancanti con la mediana dei valori presenti in quel gruppo
                 self.df[column] = self.df.groupby(target_column)[column].transform(lambda x: x.fillna(x.median()))
         else:
-            raise ValueError("Method must be 'mean' or 'median'")
+            method_fill_nan = 'mean'
+            print("Metodo non valido. Utilizzata 'mean' di default.")
         return self.df
     
     def scale_columns(self)-> pd.DataFrame:
@@ -102,6 +103,10 @@ class DataPreprocessing:
         """
         Esegue il preprocessing dei dati.
         """
+        if target_column in self.df.columns:
+            pass
+        else:
+            raise ValueError("La colonna non è presente del dataset.")
         df = self.set_column_as_index(index_col)
         df = self.drop_nan_target(target_column)
         df = self.factorize_target_column(target_column)

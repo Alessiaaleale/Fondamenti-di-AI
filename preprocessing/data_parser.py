@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import pandas as pd
 import json
 import io
+import os
 
 class FileOpenerStrategy(ABC):
     '''
@@ -104,6 +105,8 @@ class FileOpener:
     Restituisce la strategia di apertura file appropriata in base all'estensione del file
     '''
     def get_file_opener(self, file_path: str):
+        if not os.path.isfile(file_path):
+            raise FileNotFoundError(f"Il file {file_path} non è presente nella directory.")
         ext = file_path[file_path.rfind('.'):]
         if ext == '.csv':
             return CSVFileOpener()

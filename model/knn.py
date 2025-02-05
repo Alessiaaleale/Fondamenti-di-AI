@@ -5,6 +5,8 @@ class KNNClassifier:
     Classe per implementare l'algoritmo KNN
     """
     def __init__(self, k):
+        if not isinstance(k, int) or k <= 0:
+            raise ValueError("Il valore di k deve essere un intero positivo.")
         self.k = k
 
     @staticmethod
