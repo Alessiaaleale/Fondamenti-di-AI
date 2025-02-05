@@ -3,10 +3,22 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 class ResultSaver:
+    """
+    Classe per salvare i risultati delle metriche in vari formati.
+    """
     @staticmethod
     def save_plot(lista_metriche: list, user_choice: list, splits: list):
         """
         Salva il grafico dell'andamento delle metriche al crescere delle iterazioni.
+
+        Parametri:
+        ----------
+        lista_metriche : list
+            Lista delle metriche calcolate per ogni split.
+        user_choice : list
+            Lista delle metriche scelte dall'utente.
+        splits : list
+            Lista di split dei dati (iterazioni).
         """
         plt.style.use('ggplot')
         plt.figure(figsize=(10, 6))
@@ -27,9 +39,24 @@ class ResultSaver:
         plt.savefig('metrics_trend.png', dpi=300)
         plt.close()
 
-    def save_metrics_to_excel(lista_metriche:list, mean_metrics:list, filename='metrics.xlsx'):
+    @staticmethod
+    def save_metrics_to_excel(lista_metriche: list, mean_metrics: dict, filename: str = 'metrics.xlsx') -> str:
         """
         Salva le metriche in un file Excel.
+
+        Parametri:
+        ----------
+        lista_metriche : list
+            Lista delle metriche calcolate per ogni split.
+        mean_metrics : dict
+            Dizionario contenente le metriche medie.
+        filename : str, optional
+            Il nome del file Excel in cui salvare le metriche (default è 'metrics.xlsx').
+
+        Ritorna:
+        --------
+        str:
+            Il nome del file Excel in cui le metriche sono state salvate.
         """
         df = pd.DataFrame(lista_metriche)
         mean_metrics_df = pd.DataFrame([mean_metrics])

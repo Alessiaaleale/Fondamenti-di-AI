@@ -1,8 +1,7 @@
 from preprocessing.data_parser import FileOpener
-from evaluation.split import Split 
-from metrics_results.metrics import MetricsCalculator
 from preprocessing.functions import DataPreprocessing
 from model.utility import classification_evaluation
+from input_managing import InputManager
 import os
 
 if __name__ == "__main__":
@@ -22,10 +21,10 @@ if __name__ == "__main__":
 
     X, Y = preprocessor.features_and_target(target_column)
     
-    splits = Split.get_user_choice_split(X, Y)
+    splits = InputManager.get_user_choice_split(X, Y)
 
     k = int(input("Enter the value of k: "))
     
-    user_choice = MetricsCalculator.get_user_choice()
-    user_choice = MetricsCalculator.process_user_choice(user_choice)
+    user_choice = InputManager.get_user_choice()
+    user_choice = InputManager.process_user_choice(user_choice)
     res = classification_evaluation.knn_metrics(k, splits, user_choice)
