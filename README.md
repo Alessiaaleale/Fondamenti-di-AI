@@ -157,7 +157,7 @@ Il progetto utilizza diverse metriche per valutare le prestazioni del modello di
     - Formula: `Geometric Mean = √(Sensitivity × Specificity)`
 
 - **`Area under the curve`**: la misura dell'area sottesa alla ROC Curve. Indica l'efficienza globale del modello.
-    - Formula: $$ AUC = \sum_{i=1}^{n-1} \left( FPR_{i+1} - FPR_i \right) \left( \frac{TPR_i + TPR_{i+1}}{2} \right) $$  dove:
+    - Formula:$$ AUC = \sum_{i=1}^{n-1} \left( FPR_{i+1} - FPR_i \right) \left( \frac{TPR_i + TPR_{i+1}}{2} \right) $$
      - \( FPR \) è il False Positive Rate
      - \( TPR \) è il True Positive Rate
      - \( n \) è il numero totale dei punti sul ROC curve
