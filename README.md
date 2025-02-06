@@ -155,9 +155,18 @@ Il progetto utilizza diverse metriche per valutare le prestazioni del modello di
 
 - **`Geometric Mean`**: una misura dell'equilibrio tra Sensitivity e Specificity. Indica quanto il modello è bilanciato nell'identificazione delle due classi.
     - Formula: `Geometric Mean = √(Sensitivity × Specificity)`
-  
+
+- **`Area under the curve`**: la misura dell'area sottesa alla ROC Curve. Indica l'efficienza globale del modello.
+    - Formula: $$ AUC = \sum_{i=1}^{n-1} \left( FPR_{i+1} - FPR_i \right) \left( \frac{TPR_i + TPR_{i+1}}{2} \right) $$
+
+dove:
+- \( FPR \) è il False Positive Rate
+- \( TPR \) è il True Positive Rate
+- \( n \) è il numero totale dei punti sul ROC curve
+
 Queste metriche offrono una valutazione esaustiva delle prestazioni del modello, considerando sia l'accuratezza complessiva sia la capacità di distinguere correttamente tra le due classi (positivi e negativi).
 
 ## **Visualizzazione e Salvataggio dei Risultati**
-I risultati delle predizioni del modello saranno salvati automaticamente in un file Excel chiamato `metrics.xlsx`. Questo file conterrà le metriche di performance come Accuracy Rate, Sensitivity, Specificity, False alarm Rate, Miss Rate e Geometric Mean e la media di ogni metrica.
-Verrà inoltre salvato l'andamento delle metriche al crescere delle iterazioni in un _plot_.
+I risultati delle predizioni del modello saranno salvati:
+- In un file Excel chiamato `metrics.xlsx`. Questo file conterrà le metriche di performance come Accuracy Rate, Sensitivity, Specificity, False alarm Rate, Miss Rate e Geometric Mean e la media di ogni metrica.
+- In un _plot_ che mostra l'andamento delle metriche al crescere delle iterazioni.
