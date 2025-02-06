@@ -4,19 +4,31 @@ from model.knn import KNNClassifier
 from metrics_results.results import ResultSaver
 
 class classification_evaluation:
-    def knn_metrics(k, splits,user_choice) -> dict:
+    def knn_metrics(k, splits, user_choice) -> dict:
         """
         Questa funzione estrae le tuple di test e train dalla lista degli split, derivante da holdout,
         random subsampling e bootstrap, e calcola le metriche richieste dall'utente per ogni split.
         Infine, calcola la media delle metriche per ogni split.
 
-        :param k: numero di vicini
-        :param splits: lista di tuple di test e train
-        :param user_choice: lista di metriche scelte dall'utente
+        Parametri
+        ----------
+        k : int
+            Numero di vicini da considerare nell'algoritmo KNN.
+        splits : list of tuples
+            Lista di tuple contenenti i dati di test e train.
+        user_choice : list of str
+            Lista delle metriche scelte dall'utente da calcolare.
+
+        Return
+        -------
+        dict
+            Dizionario con le metriche calcolate per ciascuno split e la loro media.
+
         """
 
         metrics_dict = {item: [] for item in user_choice}
         lista_metriche = []
+
         for i in range(len(splits)):
             ytest = splits[i][3]
             xtrain = splits[i][0]
@@ -24,8 +36,9 @@ class classification_evaluation:
             xtest = splits[i][2]
 
             knn_classifier = KNNClassifier(k)
-            confusion_matrix = knn_classifier.calculate_confusion_matrix(ytest, knn_classifier.knn(xtrain, ytrain, xtest))
-            calculator = MetricsCalculator(confusion_matrix)
+            ypred = knn_classifier.knn(xtrain, ytrain, xtest)
+            confusion_matrix = knn_classifier.calculate_confusion_matrix(ytest, ypred)
+            calculator = MetricsCalculator(confusion_matrix, ypred, ytest)
 
             all_results = calculator.calculate_metrics(user_choice)
             lista_metriche.append(all_results)
@@ -40,4 +53,5 @@ class classification_evaluation:
 
         # Salva le metriche in un file Excel
         ResultSaver.save_metrics_to_excel(lista_metriche, mean_metrics)
+        
         return mean_metrics
