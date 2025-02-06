@@ -27,4 +27,4 @@ if __name__ == "__main__":
     
     user_choice = InputManager.get_user_choice()
     user_choice = InputManager.process_user_choice(user_choice)
-    res = classification_evaluation.knn_metrics(k, splits, user_choice)
+    res = classification_evaluation.knn_metrics(k, splits, user_choice, target_column)

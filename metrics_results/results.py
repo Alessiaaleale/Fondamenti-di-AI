@@ -12,8 +12,8 @@ class ResultSaver:
         plt.figure(figsize=(10, 6))
 
         colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', '#FFA500']
-
-        for i, metric in enumerate(user_choice):
+        user_choice_2 = [metric for metric in user_choice if metric != 'Area Under the Curve']
+        for i, metric in enumerate(user_choice_2):
             metric_values = [split_metrics[metric] for split_metrics in lista_metriche if metric in split_metrics]
             plt.plot(metric_values, label=metric, marker='o', color=colors[i % len(colors)])
 

@@ -4,7 +4,7 @@ from model.knn import KNNClassifier
 from metrics_results.results import ResultSaver
 
 class classification_evaluation:
-    def knn_metrics(k, splits, user_choice) -> dict:
+    def knn_metrics(k, splits, user_choice, target_column) -> dict:
         """
         Questa funzione estrae le tuple di test e train dalla lista degli split, derivante da holdout,
         random subsampling e bootstrap, e calcola le metriche richieste dall'utente per ogni split.
@@ -38,7 +38,7 @@ class classification_evaluation:
             knn_classifier = KNNClassifier(k)
             ypred = knn_classifier.knn(xtrain, ytrain, xtest)
             confusion_matrix = knn_classifier.calculate_confusion_matrix(ytest, ypred)
-            calculator = MetricsCalculator(confusion_matrix, ypred, ytest)
+            calculator = MetricsCalculator(confusion_matrix, ypred, ytest, target_column)
 
             all_results = calculator.calculate_metrics(user_choice)
             lista_metriche.append(all_results)
