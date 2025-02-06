@@ -3,22 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 class ResultSaver:
-    """
-    Classe per salvare i risultati delle metriche in vari formati.
-    """
     @staticmethod
     def save_plot(lista_metriche: list, user_choice: list, splits: list):
         """
         Salva il grafico dell'andamento delle metriche al crescere delle iterazioni.
-
-        Parametri:
-        ----------
-        lista_metriche : list
-            Lista delle metriche calcolate per ogni split.
-        user_choice : list
-            Lista delle metriche scelte dall'utente.
-        splits : list
-            Lista di split dei dati (iterazioni).
         """
         plt.style.use('ggplot')
         plt.figure(figsize=(10, 6))
@@ -39,24 +27,9 @@ class ResultSaver:
         plt.savefig('metrics_trend.png', dpi=300)
         plt.close()
 
-    @staticmethod
-    def save_metrics_to_excel(lista_metriche: list, mean_metrics: dict, filename: str = 'metrics.xlsx') -> str:
+    def save_metrics_to_excel(lista_metriche:list, mean_metrics:list, filename='metrics.xlsx'):
         """
         Salva le metriche in un file Excel.
-
-        Parametri:
-        ----------
-        lista_metriche : list
-            Lista delle metriche calcolate per ogni split.
-        mean_metrics : dict
-            Dizionario contenente le metriche medie.
-        filename : str, optional
-            Il nome del file Excel in cui salvare le metriche (default è 'metrics.xlsx').
-
-        Ritorna:
-        --------
-        str:
-            Il nome del file Excel in cui le metriche sono state salvate.
         """
         df = pd.DataFrame(lista_metriche)
         mean_metrics_df = pd.DataFrame([mean_metrics])
@@ -64,3 +37,38 @@ class ResultSaver:
             df.to_excel(writer, index=False, sheet_name='Metrics')
             mean_metrics_df.to_excel(writer, index=False, sheet_name='Mean Metrics')
         return filename
+
+    @staticmethod
+    def plot_roc_curve(fpr, tpr):
+        """
+        Plotta la curva ROC (Receiver Operating Characteristic).
+
+        Parametri
+        ----------
+        fpr : array
+            Array contenente i valori del False Positive Rate (tasso di falsi positivi).
+        tpr : array
+            Array contenente i valori del True Positive Rate (tasso di veri positivi).
+
+        Return
+        -------
+        None
+            La funzione non restituisce valori ma mostra un grafico ROC.
+
+        """
+        plt.style.use('ggplot')
+        plt.figure(figsize=(6, 6))
+        plt.xlabel("False Positive Rate (FPR)")
+        plt.ylabel("True Positive Rate (TPR)")
+        plt.title("ROC Curve")
+        plt.xlim(0, 1)
+        plt.ylim(0, 1)
+        plt.grid(True)
+
+        # Disegna la curva ROC
+        plt.plot(fpr, tpr, marker='o', linestyle='-')
+
+        plt.fill_between(fpr, tpr, alpha=0.3, color='blue')
+        plt.legend()
+        plt.savefig("ROC.png", dpi=300)
+        plt.close()
