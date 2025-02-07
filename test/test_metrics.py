@@ -1,50 +1,53 @@
 import unittest
 from metrics_results.metrics import MetricsCalculator
+import numpy as np
 
 class TestMetricsCalculator(unittest.TestCase):
+    def setUp(self):
+        self.confusion_matrix = [50, 40, 10, 5]
+        self.ypred = np.array([1, 0, 1, 0, 1])
+        self.ytest = np.array([0, 1, 1, 0, 1])
+        self.target_column = 1
+        self.calculator = MetricsCalculator(self.confusion_matrix, self.ypred, self.ytest)
+
     def test_accuracy_rate(self):
-        calculator = MetricsCalculator([50, 40, 10, 5])
-        self.assertGreaterEqual(calculator.accuracy_rate(), 0)
-        self.assertLessEqual(calculator.accuracy_rate(), 1)
+        self.assertGreaterEqual(self.calculator.accuracy_rate(), 0)
+        self.assertLessEqual(self.calculator.accuracy_rate(), 1)
 
     def test_error_rate(self):
-        calculator = MetricsCalculator([50, 40, 10, 5])
-        self.assertLessEqual(calculator.error_rate(), 1)
-        self.assertGreaterEqual(calculator.error_rate(), 0)
+        self.assertLessEqual(self.calculator.error_rate(), 1)
+        self.assertGreaterEqual(self.calculator.error_rate(), 0)
 
     def test_sensitivity(self):
-        calculator = MetricsCalculator([50, 40, 10, 5])
-        self.assertGreaterEqual(calculator.sensitivity(), 0)
-        self.assertLessEqual(calculator.sensitivity(), 1)
+        self.assertGreaterEqual(self.calculator.sensitivity(), 0)
+        self.assertLessEqual(self.calculator.sensitivity(), 1)
 
     def test_specificity(self):
-        calculator = MetricsCalculator([50, 40, 10, 5])
-        self.assertGreaterEqual(calculator.specificity(), 0)
-        self.assertLessEqual(calculator.specificity(), 1)
+        self.assertGreaterEqual(self.calculator.specificity(), 0)
+        self.assertLessEqual(self.calculator.specificity(), 1)
 
     def test_false_alarm_rate(self):
-        calculator = MetricsCalculator([50, 40, 10, 5])
-        self.assertLessEqual(calculator.false_alarm_rate(), 1)
-        self.assertGreaterEqual(calculator.false_alarm_rate(), 0)
+        self.assertLessEqual(self.calculator.false_alarm_rate(), 1)
+        self.assertGreaterEqual(self.calculator.false_alarm_rate(), 0)
 
     def test_miss_rate(self):
-        calculator = MetricsCalculator([50, 40, 10, 5])
-        self.assertLessEqual(calculator.miss_rate(), 1)
-        self.assertGreaterEqual(calculator.miss_rate(), 0)
+        self.assertLessEqual(self.calculator.miss_rate(), 1)
+        self.assertGreaterEqual(self.calculator.miss_rate(), 0)
 
     def test_geometric_mean(self):
-        calculator = MetricsCalculator([50, 40, 10, 5])
-        self.assertGreaterEqual(calculator.geometric_mean(), 0)
-        self.assertLessEqual(calculator.geometric_mean(), 1)
+        self.assertGreaterEqual(self.calculator.geometric_mean(), 0)
+        self.assertLessEqual(self.calculator.geometric_mean(), 1)
 
     def test_auc(self):
-        calculator = MetricsCalculator([50, 40, 10, 5])
-        self.assertGreaterEqual(calculator.auc(), 0)
-        self.assertLessEqual(calculator.auc(), 1)
+        self.assertGreaterEqual(self.calculator.auc(), 0)
+        self.assertLessEqual(self.calculator.auc(), 1)
 
     def test_calculate_metrics_all(self):
-        calculator = MetricsCalculator([50, 40, 10, 5])
-        metrics = calculator.calculate_metrics()
+        metrics_to_test = [
+            'Accuracy Rate', 'Error Rate', 'Sensitivity', 'Specificity', 
+            'False Alarm Rate', 'Miss Rate', 'Geometric Mean', 'Area Under the Curve'
+        ]
+        metrics = self.calculator.calculate_metrics(metrics_to_test)
         self.assertGreaterEqual(metrics['Accuracy Rate'], 0)
         self.assertLessEqual(metrics['Accuracy Rate'], 1)
         self.assertLessEqual(metrics['Error Rate'], 1)
@@ -63,8 +66,7 @@ class TestMetricsCalculator(unittest.TestCase):
         self.assertLessEqual(metrics['Area Under the Curve'], 1)
 
     def test_calculate_metrics_specific(self):
-        calculator = MetricsCalculator([50, 40, 10, 5])
-        metrics = calculator.calculate_metrics(['Accuracy Rate', 'Sensitivity'])
+        metrics = self.calculator.calculate_metrics(['Accuracy Rate', 'Sensitivity'])
         self.assertGreaterEqual(metrics['Accuracy Rate'], 0)
         self.assertLessEqual(metrics['Accuracy Rate'], 1)
         self.assertGreaterEqual(metrics['Sensitivity'], 0)
@@ -78,14 +80,14 @@ class TestMetricsCalculator(unittest.TestCase):
 
     def test_invalid_confusion_matrix(self):
         with self.assertRaises(ValueError):
-            MetricsCalculator([50, 40, 10])
+            MetricsCalculator([50, 40, 10], self.ypred, self.ytest)
 
     def test_negative_values_in_confusion_matrix(self):
         with self.assertRaises(ValueError):
-            MetricsCalculator([50, -10, -5, 5])
+            MetricsCalculator([50, -10, -5, 5], self.ypred, self.ytest)
 
     def test_division_by_zero(self):
-        calculator = MetricsCalculator([0, 0, 0, 0])
+        calculator = MetricsCalculator([0, 0, 0, 0], self.ypred, self.ytest)
         with self.assertRaises(ValueError):
             calculator.sensitivity()
         with self.assertRaises(ValueError):

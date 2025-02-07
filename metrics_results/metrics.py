@@ -14,7 +14,7 @@ class MetricsCalculator:
         Array contenente i valori reali del set di test.
     """
 
-    def __init__(self, confusion_matrix, ypred, ytest, target_column):
+    def __init__(self, confusion_matrix, ypred, ytest):
         """
         Inizializza un'istanza di MetricsCalculator con i dati di confusione, le predizioni e i valori di test.
 
@@ -31,7 +31,7 @@ class MetricsCalculator:
         self.confusion_matrix = confusion_matrix
         self.tp, self.tn, self.fp, self.fn = confusion_matrix
         self.ypred = ypred
-        self.ytest = ytest[target_column].tolist()
+        self.ytest = ytest
         for i in [self.tp, self.tn, self.fp, self.fn]:
             if i < 0:
                 raise ValueError("I valori della matrice di confusione non possono essere negativi.")
